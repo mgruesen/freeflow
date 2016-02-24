@@ -25,6 +25,7 @@ add_library(freeflow SHARED
   poll.cpp
   epoll.cpp
   select.cpp
+  kqueue.cpp
   socket.cpp
   ip.cpp
   unix.cpp

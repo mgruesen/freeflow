@@ -17,18 +17,18 @@ struct Epoll_event : epoll_event
   Epoll_event() = default;
 
   // Returns true if a read event occurred.
-  bool can_read() const { return (events & EPOLLIN) == EPOLLIN; }
+  bool can_read() const { return (events & EPOLLIN); }
   // Returns true if a write event occurred.
-  bool can_write() const { return (events & EPOLLOUT) == EPOLLOUT; }
+  bool can_write() const { return (events & EPOLLOUT); }
   // Returns true if a error event occurred.
-  bool has_error() const { return (events & EPOLLERR) == EPOLLERR; }
+  bool has_error() const { return (events & EPOLLERR); }
 
   // Get the file descriptor associated with the event.
   inline int fd() const { return data.fd; }
 };
 
 
-
+// A set of epoll events, built ontop of a std::vector<Epoll_event>.
 struct Epoll_set : std::vector<Epoll_event>
 {
   using std::vector<Epoll_event>::vector;
@@ -41,18 +41,14 @@ struct Epoll_set : std::vector<Epoll_event>
 
   // Accessors.
   //
+  bool can_read(int);
+  bool can_write(int);
+  bool has_error(int);
+
   // Return the epoll file descriptor.
   inline int fd() const { return epfd_; }
   // Return the maximum number of events to listen for.
   inline int max() const { return max_; }
-  // Returns true if the given file descriptor can read.
-  bool can_read(int);
-
-  // Returns true if the given file descriptor can write.
-  bool can_write(int);
-
-  // Returns true if the given file descriptor has an error.
-  bool has_error(int);
 
   // Data Members.
   //
@@ -74,7 +70,7 @@ Epoll_set::Epoll_set(int size)
   epfd_ = epoll_create(size);
 }
 
-//
+// Adds the file descriptor to the epoll set.
 inline void
 Epoll_set::add(int fd)
 {
@@ -84,7 +80,7 @@ Epoll_set::add(int fd)
 }
 
 
-//
+// Removes the file descriptor from the epoll set.
 inline void
 Epoll_set::del(int fd)
 {
@@ -92,7 +88,7 @@ Epoll_set::del(int fd)
 }
 
 
-//
+// Clears all entries in the epoll set.
 inline void
 Epoll_set::reset()
 {
@@ -100,7 +96,7 @@ Epoll_set::reset()
 }
 
 
-//
+// Returns true if the given file descriptor can read.
 inline bool
 Epoll_set::can_read(int fd)
 {
@@ -110,7 +106,7 @@ Epoll_set::can_read(int fd)
 }
 
 
-//
+// Returns true if the given file descriptor can write.
 inline bool
 Epoll_set::can_write(int fd)
 {
@@ -120,7 +116,7 @@ Epoll_set::can_write(int fd)
 }
 
 
-//
+// Returns true if the given file descriptor has an error.
 inline bool
 Epoll_set::has_error(int fd)
 {
