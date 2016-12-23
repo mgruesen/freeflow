@@ -33,7 +33,7 @@ struct Epoll_event : epoll_event
 };
 
 
-
+// A set of epoll events, built ontop of a std::vector<Epoll_event>.
 struct Epoll_set : std::vector<Epoll_event>
 {
   using std::vector<Epoll_event>::vector;
@@ -46,6 +46,10 @@ struct Epoll_set : std::vector<Epoll_event>
 
   // Accessors.
   //
+  bool can_read(int);
+  bool can_write(int);
+  bool has_error(int);
+
   // Return the epoll file descriptor.
   inline int fd() const { return epfd_; }
   
@@ -87,7 +91,7 @@ Epoll_set::Epoll_set(int size)
   epfd_ = epoll_create(size);
 }
 
-//
+// Adds the file descriptor to the epoll set.
 inline void
 Epoll_set::add(int fd)
 {
@@ -97,7 +101,7 @@ Epoll_set::add(int fd)
 }
 
 
-//
+// Removes the file descriptor from the epoll set.
 inline void
 Epoll_set::del(int fd)
 {
@@ -105,7 +109,7 @@ Epoll_set::del(int fd)
 }
 
 
-//
+// Clears all entries in the epoll set.
 inline void
 Epoll_set::reset()
 {
@@ -113,7 +117,7 @@ Epoll_set::reset()
 }
 
 
-//
+// Returns true if the given file descriptor can read.
 inline bool
 Epoll_set::can_read(int fd)
 {
@@ -123,7 +127,7 @@ Epoll_set::can_read(int fd)
 }
 
 
-//
+// Returns true if the given file descriptor can write.
 inline bool
 Epoll_set::can_write(int fd)
 {
@@ -133,7 +137,7 @@ Epoll_set::can_write(int fd)
 }
 
 
-//
+// Returns true if the given file descriptor has an error.
 inline bool
 Epoll_set::has_error(int fd)
 {
@@ -169,7 +173,8 @@ epoll(Epoll_set& eps, int timeout)
 
 } // namespace ff
 
+// Endif __linux__
 #endif
 
-
+// End include guard
 #endif
