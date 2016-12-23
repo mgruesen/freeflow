@@ -21,7 +21,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     message(FATAL_ERROR "Requires GCC version 4.9 or greater")
   endif()
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments -stdlib=libc++")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments -stdlib=libstdc++")
 endif()
 
 

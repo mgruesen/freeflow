@@ -31,7 +31,7 @@ using namespace fp;
 
 // NOTE: Clang will optimize assume that the running loop never terminates 
 // if this is not declared volatile. Go figure.
-static bool running;
+static volatile bool running;
 
 // If true, the dataplane will terminate after forwarding packets from
 // a source to a destination.
@@ -117,7 +117,7 @@ port_work(void* arg)
       // Ingress the packet.
       if (ports[id].recv(buf.context())) {
         ++npackets;
-        nbytes += buf.context().packet().size();
+        nbytes += buf.context().packet().length();
         // TODO: This really just runs one step of the pipeline. This needs
         // to be a loop that continues processing until there are no further
         // table redirections.

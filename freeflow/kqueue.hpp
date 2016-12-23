@@ -1,6 +1,8 @@
 #ifndef FREEFLOW_KQUEUE_HPP
 #define FREEFLOW_KQUEUE_HPP
 
+#ifndef __linux__
+
 #include <sys/event.h>
 #include <sys/time.h>
 #include <stdint>
@@ -15,7 +17,7 @@ struct KQueue_event : struct kevent
 {
   KQueue_event() = default;
 
-  inline uint32_t id()        const { return ident); }
+  inline uint32_t id()        const { return ident; }
 
   inline bool     is_read()   const { return flags & EV_FILTREAD; }
   inline bool     is_write()  const { return flags & EV_FILTWRITE; }
@@ -130,4 +132,8 @@ monitor(Kqueue& kq, int timeout)
 
 } // end namspace ff
 
+// Endifndef __linux__
+#endif
+
+// End include guard
 #endif

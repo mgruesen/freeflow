@@ -44,11 +44,6 @@ struct Epoll_set : std::vector<Epoll_event>
   inline void del(int);
   inline void reset();
 
-  // Accessors.
-  //
-  bool can_read(int);
-  bool can_write(int);
-  bool has_error(int);
 
   // Return the epoll file descriptor.
   inline int fd() const { return epfd_; }

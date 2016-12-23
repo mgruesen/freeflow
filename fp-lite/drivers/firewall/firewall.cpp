@@ -149,7 +149,7 @@ main(int argc, char* argv[])
   {
     // Ingress the packet.
     Byte buf[2048];
-    Context cxt(buf, &dp);
+    Context cxt(&dp, buf);
     bool ok = port.recv(cxt);
 
     // Handle error or closure.
@@ -178,7 +178,7 @@ main(int argc, char* argv[])
     }
     else {
       ++npackets;
-      nbytes += cxt.packet().size();
+      nbytes += cxt.packet().length();
     }
 
     // Otherwise, process the application.

@@ -132,7 +132,7 @@ main()
     //std::cout << "[wire] ingress on: " << port.id() << '\n';
     // Ingress the packet.
     Byte buf[2048];
-    Context cxt(buf, &dp);
+    Context cxt(&dp, buf);
     bool ok = port.recv(cxt);
 
     // Handle error or closure.
@@ -197,7 +197,6 @@ main()
     auto p1_curr = port1.stats();
     auto p2_curr = port2.stats();
     // Clears the screen.
-    system("clear");
     std::cout << "Receive Rate  (Pkt/s): " << (p2_curr.packets_rx -
       p2_stats.packets_rx) << '\n';
     std::cout << "Receive Rate   (Gb/s): " <<  ((p2_curr.bytes_rx -
