@@ -8,4 +8,8 @@
 namespace fp
 {
 
+class Action
+{
+};
+
 } // namespace fp
