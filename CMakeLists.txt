@@ -3,21 +3,13 @@
 cmake_minimum_required(VERSION 2.8.12)
 cmake_policy(SET CMP0042 NEW)
 
-ENABLE_TESTING()
-INCLUDE(CTest)
-
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-set(CTEST_PROJECT_NAME "Test")
-set(CTEST_NIGHTLY_START_TIME "01:00:00 UTC")
-
-set(CTEST_DROP_METHOD "http")
-set(CTEST_DROP_SITE "192.168.0.102")
-set(CTEST_DROP_LOCATION "/CDash/public/submit.php?project=Test")
-set(CTEST_DROP_SITE_CDASH TRUE)
 
 # Project declaration
 project(freeflow C CXX)
 
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
+ENABLE_TESTING()
+INCLUDE(CTest)
 
 # Options
 option(FREEFLOW_USE_PCAP "Enable PCAP" ON)
