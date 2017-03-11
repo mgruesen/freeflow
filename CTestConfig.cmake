@@ -11,5 +11,5 @@ set(CTEST_NIGHTLY_START_TIME "01:00:00 UTC")
 
 set(CTEST_DROP_METHOD "http")
 set(CTEST_DROP_SITE "192.168.0.102")
-set(CTEST_DROP_LOCATION "/CDash/public/submit.php?project=Test")
+set(CTEST_DROP_LOCATION "/CDash/public/submit.php?project=Freeflow")
 set(CTEST_DROP_SITE_CDASH TRUE)
