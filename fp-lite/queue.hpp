@@ -53,6 +53,11 @@ Queue<T>::dequeue()
 template <typename T>
 class Locked_queue
 {
+#ifndef __linux__
+using mutex_type = std::shared_mutex;
+#else
+using mutex_type = std::shared_timed_mutex;
+#endif
 public:
   Locked_queue();
   ~Locked_queue();
@@ -64,8 +69,8 @@ public:
   bool empty() { return size(); }
 
 private:
-  std::queue<T>           queue_;
-  std::shared_timed_mutex mutex_;
+  std::queue<T> queue_;
+  mutex_type    mutex_;
 };
 
 

@@ -5,7 +5,7 @@
 
 #include <sys/event.h>
 #include <sys/time.h>
-#include <stdint>
+#include <cstdint>
 #include <vector>
 #include <algorithm>
 
@@ -13,7 +13,7 @@ namespace ff
 {
 
 
-struct KQueue_event : struct kevent
+struct KQueue_event : public kevent
 {
   KQueue_event() = default;
 
@@ -23,10 +23,10 @@ struct KQueue_event : struct kevent
   inline bool     is_write()  const { return flags & EV_FILTWRITE; }
   inline bool     is_error()  const { return flags & EV_ERROR; }
 
-  inline uint32_t filter()    const { return filter; }
-  inline uint32_t flags()     const { return flags; }
-  inline int64_t  data()      const { return data; }
-  inline void*    udata()     const { return (void*)udata; }
+  inline uint32_t get_filter()    const { return filter; }
+  inline uint32_t get_flags()     const { return flags; }
+  inline int64_t  get_data()      const { return data; }
+  inline void*    get_udata()     const { return (void*)udata; }
 };
 
 struct KQueue : std::vector<KQueue_event>
@@ -34,24 +34,26 @@ struct KQueue : std::vector<KQueue_event>
   KQueue(int);
 
   // Mutators.
-  void add(int);
-  void del(int);
-  void clear();
+  inline void add(int);
+  inline void del(int);
+  inline void clear();
 
   // Accessors.
-  bool can_read(int) const;
-  bool can_write(int) const;
-  bool has_error(int) const;
+  inline bool can_read(int) const;
+  inline bool can_write(int) const;
+  inline bool has_error(int) const;
 
   // Returns the kqueue fd.
-  int fd() const { return kqfd_; }
+  inline int fd() const { return kqfd_; }
 
   // Data members.
   //
   // Master kqueue event.
   KQueue_event master_;
+ 
   // Number of events after a call to kevent.
   int num_events_;
+ 
   // The kqueue fd.
   int kqfd_;
 };
@@ -89,30 +91,30 @@ KQueue::clear()
 
 // Returns true if the given file descriptor can read.
 inline bool
-can_read(int fd) const
+KQueue::can_read(int fd) const
 {
   return std::find_if(begin(), end(), [fd](KQueue_event& kqe){
-    return kqe.fd() == fd && kqe.is_read();
+    return kqe.id() == fd && kqe.is_read();
   });
 }
 
 
 // Returns true if the given file descriptor can write.
 inline bool
-can_write(int fd) const
+KQueue::can_write(int fd) const
 {
   return std::find_if(begin(), end(), [fd](KQueue_event& kqe){
-    return kqe.fd() == fd && kqe.is_write();
+    return kqe.id() == fd && kqe.is_write();
   });
 }
 
 
 // Returns true if the given file descriptor has an error.
 inline bool
-has_error(int fd) const
+KQueue::has_error(int fd) const
 {
   return std::find_if(begin(), end(), [fd](KQueue_event& kqe){
-    return kqe.fd() == fd && kqe.is_error();
+    return kqe.id() == fd && kqe.is_error();
   });
 }
 
@@ -122,9 +124,9 @@ has_error(int fd) const
 // Returns the number of events registered with a given Kqueue that occurred
 // in the given duration in milliseconds.
 inline int
-monitor(Kqueue& kq, int timeout)
+monitor(KQueue& kq, int timeout)
 {
-  struct timespec ts = { 0, timeout * 1000; };
+  struct timespec ts = { 0, timeout * 1000 };
   kq.num_events_ = kevent(kq.fd(), kq.master(), kq.size(), kq.data(), kq.size(),
     &ts);
   return kq.num_events_;
