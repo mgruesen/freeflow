@@ -22,14 +22,15 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS "4.9")
     message(FATAL_ERROR "Requires GCC version 4.9 or greater")
   endif()
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 elseif (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments -stdlib=libc++")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Qunused-arguments -stdlib=libc++ -std=c++1y")
 endif()
 
 
 # C/C++ build flags.
-set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wall -lc")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y -Wall -pthread")
+set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -Wall")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pthread")
 
 
 # Require Boost C++ Libraries.

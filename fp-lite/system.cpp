@@ -6,7 +6,7 @@
 #include "dataplane.hpp"
 
 #include <cassert>
-
+#include <cstdarg>
 
 namespace fp
 {
@@ -116,8 +116,6 @@ extern "C"
 void
 fp_drop(fp::Context* cxt)
 {
-  if (!cxt)
-    throw std::string("Null context pointer");
   if (fp::Port* drop = cxt->dataplane()->get_drop_port())
     cxt->set_output_port(drop->id());
   else
@@ -129,7 +127,8 @@ void
 fp_flood(fp::Context* cxt)
 {
   // Output to all ports other than in_port
-  // fp::Port* flood = fp::port_table.flood_port();
+  //fp::Port* flood = fp::port_table.flood_port();
+  //assert(flood);
   // flood->send(cxt);
 }
 
@@ -138,8 +137,7 @@ fp_flood(fp::Context* cxt)
 void
 fp_output_port(fp::Context* cxt, fp::Port::Id id)
 {
-  // fp::Port* p = cxt->dataplane()->get_port(id);
-  // assert(p);
+  assert(cxt->dataplane()->get_port(id));
   fp_context_set_output_port(cxt, id);
 }
 

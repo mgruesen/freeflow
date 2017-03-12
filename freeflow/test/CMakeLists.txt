@@ -25,6 +25,6 @@ endmacro()
 # add_test(test-json-10 json-parse "{\"a\":1, \"b\":2, \"c\":3}")
 
 # TODO: This should be in a performance testing framework.
-add_tester(json-bench json-bench.cpp)
+add_test_program(json-bench json-bench.cpp)
 
 add_test_program(json json.cpp)
